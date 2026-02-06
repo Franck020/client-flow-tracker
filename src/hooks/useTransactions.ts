@@ -1,50 +1,19 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { Transaction, DailyReport } from '@/types/client';
-import { format, isToday, startOfDay, isSameDay } from 'date-fns';
-
-const initialTransactions: Transaction[] = [
-  {
-    id: '1',
-    type: 'entrada',
-    category: 'pagamento',
-    description: 'Pagamento mensalidade - Francisco Zinova',
-    amount: 3500,
-    date: new Date(),
-    method: 'cash',
-    clientId: '1',
-    clientName: 'Francisco Zinova',
-  },
-  {
-    id: '2',
-    type: 'saida',
-    category: 'alimentacao',
-    description: 'Almoço equipe',
-    amount: 5000,
-    date: new Date(),
-  },
-  {
-    id: '3',
-    type: 'entrada',
-    category: 'pagamento',
-    description: 'Pagamento mensalidade + multa - Ana Beatriz',
-    amount: 4000,
-    date: new Date(),
-    method: 'transfer',
-    clientId: '5',
-    clientName: 'Ana Beatriz',
-  },
-  {
-    id: '4',
-    type: 'saida',
-    category: 'agua',
-    description: 'Conta de água do escritório',
-    amount: 8500,
-    date: new Date(),
-  },
-];
+import { isToday, startOfDay, isSameDay } from 'date-fns';
+import { getAll, put, remove as dbRemove } from '@/lib/db';
 
 export function useTransactions() {
-  const [transactions, setTransactions] = useState<Transaction[]>(initialTransactions);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    getAll<Transaction>('transactions').then(stored => {
+      const parsed = stored.map(t => ({ ...t, date: new Date(t.date) }));
+      setTransactions(parsed);
+      setLoaded(true);
+    });
+  }, []);
 
   const addTransaction = useCallback((transaction: Omit<Transaction, 'id'>) => {
     const newTransaction: Transaction = {
@@ -52,11 +21,13 @@ export function useTransactions() {
       id: Date.now().toString(),
     };
     setTransactions(prev => [...prev, newTransaction]);
+    put('transactions', newTransaction);
     return newTransaction;
   }, []);
 
   const removeTransaction = useCallback((id: string) => {
     setTransactions(prev => prev.filter(t => t.id !== id));
+    dbRemove('transactions', id);
   }, []);
 
   const getTodayTransactions = useMemo(() => {
@@ -67,10 +38,10 @@ export function useTransactions() {
     const todayTx = getTodayTransactions;
     const entradas = todayTx.filter(t => t.type === 'entrada');
     const saidas = todayTx.filter(t => t.type === 'saida');
-    
+
     const totalEntradas = entradas.reduce((sum, t) => sum + t.amount, 0);
     const totalSaidas = saidas.reduce((sum, t) => sum + t.amount, 0);
-    
+
     return {
       date: startOfDay(new Date()),
       totalEntradas,
@@ -84,10 +55,10 @@ export function useTransactions() {
     const dayTx = transactions.filter(t => isSameDay(t.date, date));
     const entradas = dayTx.filter(t => t.type === 'entrada');
     const saidas = dayTx.filter(t => t.type === 'saida');
-    
+
     const totalEntradas = entradas.reduce((sum, t) => sum + t.amount, 0);
     const totalSaidas = saidas.reduce((sum, t) => sum + t.amount, 0);
-    
+
     return {
       date: startOfDay(date),
       totalEntradas,
@@ -119,5 +90,6 @@ export function useTransactions() {
     totalEntradas,
     totalSaidas,
     balance: totalEntradas - totalSaidas,
+    loaded,
   };
 }

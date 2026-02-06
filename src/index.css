@@ -2,111 +2,65 @@
 @tailwind components;
 @tailwind utilities;
 
-/* GestorNet - Sistema de Gestão de Clientes
-   Design System com cores profissionais e indicadores de status claros
-*/
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 220 25% 10%;
+    --background: 222 22% 8%;
+    --foreground: 210 20% 92%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 25% 10%;
+    --card: 222 20% 13%;
+    --card-foreground: 210 20% 92%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 10%;
+    --popover: 222 20% 13%;
+    --popover-foreground: 210 20% 92%;
 
-    --primary: 217 91% 50%;
+    --primary: 217 91% 55%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 220 25% 10%;
+    --secondary: 222 18% 18%;
+    --secondary-foreground: 210 20% 92%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 10% 45%;
-
-    --accent: 217 91% 95%;
-    --accent-foreground: 217 91% 40%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 217 91% 50%;
-
-    --radius: 0.625rem;
-
-    /* Status colors - Signal */
-    --status-active: 142 76% 36%;
-    --status-active-foreground: 0 0% 100%;
-    --status-active-bg: 142 76% 95%;
-    
-    --status-inactive: 0 84% 60%;
-    --status-inactive-foreground: 0 0% 100%;
-    --status-inactive-bg: 0 84% 97%;
-    
-    --status-warning: 38 92% 50%;
-    --status-warning-foreground: 0 0% 100%;
-    --status-warning-bg: 38 92% 95%;
-
-    /* Financial colors */
-    --income: 142 76% 36%;
-    --income-bg: 142 76% 95%;
-    --expense: 0 84% 60%;
-    --expense-bg: 0 84% 97%;
-
-    /* Sidebar */
-    --sidebar-background: 220 25% 10%;
-    --sidebar-foreground: 220 14% 96%;
-    --sidebar-primary: 217 91% 60%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 20% 18%;
-    --sidebar-accent-foreground: 220 14% 96%;
-    --sidebar-border: 220 20% 18%;
-    --sidebar-ring: 217 91% 60%;
-  }
-
-  .dark {
-    --background: 220 25% 6%;
-    --foreground: 220 14% 96%;
-
-    --card: 220 25% 10%;
-    --card-foreground: 220 14% 96%;
-
-    --popover: 220 25% 10%;
-    --popover-foreground: 220 14% 96%;
-
-    --primary: 217 91% 60%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 220 20% 18%;
-    --secondary-foreground: 220 14% 96%;
-
-    --muted: 220 20% 18%;
+    --muted: 222 18% 18%;
     --muted-foreground: 220 10% 55%;
 
-    --accent: 217 91% 20%;
-    --accent-foreground: 217 91% 70%;
+    --accent: 217 50% 22%;
+    --accent-foreground: 217 91% 75%;
 
     --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 20% 18%;
-    --input: 220 20% 18%;
-    --ring: 217 91% 60%;
+    --border: 222 18% 20%;
+    --input: 222 18% 20%;
+    --ring: 217 91% 55%;
 
-    --sidebar-background: 220 25% 6%;
-    --sidebar-foreground: 220 14% 96%;
-    --sidebar-primary: 217 91% 60%;
+    --radius: 0.625rem;
+
+    --status-active: 142 76% 40%;
+    --status-active-foreground: 0 0% 100%;
+    --status-active-bg: 142 40% 14%;
+
+    --status-inactive: 0 70% 50%;
+    --status-inactive-foreground: 0 0% 100%;
+    --status-inactive-bg: 0 40% 14%;
+
+    --status-warning: 38 92% 50%;
+    --status-warning-foreground: 0 0% 100%;
+    --status-warning-bg: 38 50% 14%;
+
+    --income: 142 76% 40%;
+    --income-bg: 142 40% 14%;
+    --expense: 0 70% 50%;
+    --expense-bg: 0 40% 14%;
+
+    --sidebar-background: 222 25% 6%;
+    --sidebar-foreground: 210 20% 92%;
+    --sidebar-primary: 217 91% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 20% 12%;
-    --sidebar-accent-foreground: 220 14% 96%;
-    --sidebar-border: 220 20% 12%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-accent: 222 20% 12%;
+    --sidebar-accent-foreground: 210 20% 92%;
+    --sidebar-border: 222 20% 12%;
+    --sidebar-ring: 217 91% 55%;
   }
 }
 
@@ -125,35 +79,35 @@
   .card-gradient {
     @apply bg-gradient-to-br from-card to-secondary/30;
   }
-  
+
   .status-badge-active {
     @apply bg-[hsl(var(--status-active-bg))] text-[hsl(var(--status-active))] font-medium;
   }
-  
+
   .status-badge-inactive {
     @apply bg-[hsl(var(--status-inactive-bg))] text-[hsl(var(--status-inactive))] font-medium;
   }
-  
+
   .status-badge-warning {
     @apply bg-[hsl(var(--status-warning-bg))] text-[hsl(var(--status-warning))] font-medium;
   }
-  
+
   .client-row-active {
-    @apply bg-[hsl(var(--status-active-bg))] hover:bg-[hsl(142_76%_92%)] border-l-4 border-l-[hsl(var(--status-active))];
+    @apply bg-[hsl(var(--status-active-bg))] hover:bg-[hsl(142_40%_18%)] border-l-4 border-l-[hsl(var(--status-active))];
   }
-  
+
   .client-row-inactive {
-    @apply bg-[hsl(var(--status-inactive-bg))] hover:bg-[hsl(0_84%_94%)] border-l-4 border-l-[hsl(var(--status-inactive))];
+    @apply bg-[hsl(var(--status-inactive-bg))] hover:bg-[hsl(0_40%_18%)] border-l-4 border-l-[hsl(var(--status-inactive))];
   }
-  
+
   .stat-card {
     @apply bg-card rounded-xl p-6 shadow-sm border border-border/50 transition-all duration-200 hover:shadow-md;
   }
-  
+
   .income-card {
     @apply stat-card border-l-4 border-l-[hsl(var(--income))];
   }
-  
+
   .expense-card {
     @apply stat-card border-l-4 border-l-[hsl(var(--expense))];
   }
