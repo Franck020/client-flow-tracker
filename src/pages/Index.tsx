@@ -12,6 +12,8 @@ import { TransactionList } from '@/components/TransactionList';
 import { DailyReportModal } from '@/components/DailyReportModal';
 import { RegisterManagerModal } from '@/components/RegisterManagerModal';
 import { ManageManagersModal } from '@/components/ManageManagersModal';
+import { EditClientModal } from '@/components/EditClientModal';
+import { BackupModal } from '@/components/BackupModal';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,7 +21,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import {
   Users, UserX, TrendingUp, Plus, Search,
-  Calendar, BarChart3, Wifi, LogOut, FileText, UserPlus, Users as UsersIcon
+  Calendar, BarChart3, Wifi, LogOut, FileText, UserPlus, Users as UsersIcon, Database
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -28,7 +30,7 @@ const Index = () => {
   const { manager, logout } = useAuth();
   const {
     clients, activeClients, inactiveClients,
-    addClient, removeClient, toggleSignal, makePayment, loaded: clientsLoaded
+    addClient, updateClient, removeClient, toggleSignal, makePayment, loaded: clientsLoaded
   } = useClients();
   const {
     addTransaction, getTodayTransactions, getTodayReport, loaded: txLoaded
@@ -41,6 +43,8 @@ const Index = () => {
   const [isReportOpen, setIsReportOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [isManagersOpen, setIsManagersOpen] = useState(false);
+  const [isBackupOpen, setIsBackupOpen] = useState(false);
+  const [editingClient, setEditingClient] = useState<Client | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleClientClick = (client: Client) => {
@@ -138,6 +142,9 @@ const Index = () => {
             </Button>
             <Button variant="ghost" size="sm" onClick={() => setIsManagersOpen(true)} title="Gerentes">
               <UsersIcon className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => setIsBackupOpen(true)} title="Backup">
+              <Database className="h-4 w-4" />
             </Button>
             <Button variant="ghost" size="sm" onClick={logout} title="Sair">
               <LogOut className="h-4 w-4" />
@@ -296,12 +303,20 @@ const Index = () => {
         onMakePayment={handleMakePayment}
         onToggleSignal={toggleSignal}
         onRemoveClient={removeClient}
+        onEditClient={(client) => setEditingClient(client)}
+      />
+      <EditClientModal
+        client={editingClient}
+        isOpen={!!editingClient}
+        onClose={() => setEditingClient(null)}
+        onSave={updateClient}
       />
       <AddClientModal isOpen={isAddClientOpen} onClose={() => setIsAddClientOpen(false)} onAddClient={handleAddClient} />
       <AddTransactionModal isOpen={isAddTransactionOpen} onClose={() => setIsAddTransactionOpen(false)} onAddTransaction={handleAddTransaction} />
       <DailyReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} report={todayReport} managerName={manager?.name || ''} />
       <RegisterManagerModal isOpen={isRegisterOpen} onClose={() => setIsRegisterOpen(false)} />
       <ManageManagersModal isOpen={isManagersOpen} onClose={() => setIsManagersOpen(false)} />
+      <BackupModal isOpen={isBackupOpen} onClose={() => setIsBackupOpen(false)} onRestore={() => {}} />
     </div>
   );
 };
