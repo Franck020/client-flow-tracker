@@ -11,6 +11,7 @@ import { AddTransactionModal } from '@/components/AddTransactionModal';
 import { TransactionList } from '@/components/TransactionList';
 import { DailyReportModal } from '@/components/DailyReportModal';
 import { RegisterManagerModal } from '@/components/RegisterManagerModal';
+import { ManageManagersModal } from '@/components/ManageManagersModal';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,7 +19,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import {
   Users, UserX, TrendingUp, Plus, Search,
-  Calendar, BarChart3, Wifi, LogOut, FileText, UserPlus
+  Calendar, BarChart3, Wifi, LogOut, FileText, UserPlus, Users as UsersIcon
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -39,6 +40,7 @@ const Index = () => {
   const [isAddTransactionOpen, setIsAddTransactionOpen] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [isManagersOpen, setIsManagersOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleClientClick = (client: Client) => {
@@ -133,6 +135,9 @@ const Index = () => {
             </Button>
             <Button variant="ghost" size="sm" onClick={() => setIsRegisterOpen(true)} title="Registrar gerente">
               <UserPlus className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => setIsManagersOpen(true)} title="Gerentes">
+              <UsersIcon className="h-4 w-4" />
             </Button>
             <Button variant="ghost" size="sm" onClick={logout} title="Sair">
               <LogOut className="h-4 w-4" />
@@ -296,6 +301,7 @@ const Index = () => {
       <AddTransactionModal isOpen={isAddTransactionOpen} onClose={() => setIsAddTransactionOpen(false)} onAddTransaction={handleAddTransaction} />
       <DailyReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} report={todayReport} managerName={manager?.name || ''} />
       <RegisterManagerModal isOpen={isRegisterOpen} onClose={() => setIsRegisterOpen(false)} />
+      <ManageManagersModal isOpen={isManagersOpen} onClose={() => setIsManagersOpen(false)} />
     </div>
   );
 };

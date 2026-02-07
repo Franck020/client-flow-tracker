@@ -6,11 +6,12 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
-import { Client, PAYMENT_CONFIG, BOSS_PASSWORD } from '@/types/client';
+import { Client, PAYMENT_CONFIG } from '@/types/client';
 import { StatusBadge, SignalIndicator } from './StatusBadge';
+import { useAuth } from '@/contexts/AuthContext';
 import {
   User, Phone, MapPin, CreditCard, Calendar, Wifi, WifiOff,
-  AlertTriangle, Trash2, Shield
+  AlertTriangle, Trash2, Lock
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -33,7 +34,8 @@ export function ClientDetailsModal({
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'transfer'>('cash');
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [bossPassword, setBossPassword] = useState('');
+  const [managerPassword, setManagerPassword] = useState('');
+  const { manager } = useAuth();
 
   if (!client) return null;
 
@@ -47,13 +49,13 @@ export function ClientDetailsModal({
   };
 
   const handleDelete = () => {
-    if (bossPassword !== BOSS_PASSWORD) {
-      toast.error('Senha do chefe incorrecta');
+    if (!manager || managerPassword !== manager.password) {
+      toast.error('Senha do gerente incorrecta');
       return;
     }
     onRemoveClient(client.id);
     setShowDeleteConfirm(false);
-    setBossPassword('');
+    setManagerPassword('');
     onClose();
   };
 
@@ -210,22 +212,22 @@ export function ClientDetailsModal({
                   <p className="font-medium">Confirmar exclusão?</p>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Esta acção não pode ser desfeita. Insira a senha do chefe para confirmar.
+                  Esta acção não pode ser desfeita. Insira a sua senha para confirmar.
                 </p>
                 <div className="space-y-2">
-                  <Label htmlFor="del-boss-pass" className="flex items-center gap-1 text-sm">
-                    <Shield className="h-3 w-3" /> Senha do Chefe
+                  <Label htmlFor="del-mgr-pass" className="flex items-center gap-1 text-sm">
+                    <Lock className="h-3 w-3" /> Sua Senha
                   </Label>
                   <Input
-                    id="del-boss-pass"
+                    id="del-mgr-pass"
                     type="password"
-                    placeholder="Senha de autorização"
-                    value={bossPassword}
-                    onChange={(e) => setBossPassword(e.target.value)}
+                    placeholder="Senha do gerente"
+                    value={managerPassword}
+                    onChange={(e) => setManagerPassword(e.target.value)}
                   />
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="outline" onClick={() => { setShowDeleteConfirm(false); setBossPassword(''); }} className="flex-1">Cancelar</Button>
+                  <Button variant="outline" onClick={() => { setShowDeleteConfirm(false); setManagerPassword(''); }} className="flex-1">Cancelar</Button>
                   <Button variant="destructive" onClick={handleDelete} className="flex-1">Confirmar Exclusão</Button>
                 </div>
               </div>
