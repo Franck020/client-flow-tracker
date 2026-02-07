@@ -48,7 +48,7 @@ export default function Login() {
           </div>
           <div>
             <CardTitle className="text-2xl">GestorNet</CardTitle>
-            <CardDescription>Sistema de Gestão de Clientes</CardDescription>
+            <CardDescription>Sistema de Gestão da Empresa</CardDescription>
           </div>
         </CardHeader>
         <CardContent>

@@ -11,7 +11,7 @@ import { StatusBadge, SignalIndicator } from './StatusBadge';
 import { useAuth } from '@/contexts/AuthContext';
 import {
   User, Phone, MapPin, CreditCard, Calendar, Wifi, WifiOff,
-  AlertTriangle, Trash2, Lock
+  AlertTriangle, Trash2, Lock, Pencil
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -25,10 +25,11 @@ interface ClientDetailsModalProps {
   onMakePayment: (clientId: string, amount: number, method: 'cash' | 'transfer') => void;
   onToggleSignal: (clientId: string) => void;
   onRemoveClient: (clientId: string) => void;
+  onEditClient: (client: Client) => void;
 }
 
 export function ClientDetailsModal({
-  client, isOpen, onClose, onMakePayment, onToggleSignal, onRemoveClient,
+  client, isOpen, onClose, onMakePayment, onToggleSignal, onRemoveClient, onEditClient,
 }: ClientDetailsModalProps) {
   const [paymentAmount, setPaymentAmount] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<'cash' | 'transfer'>('cash');
@@ -84,7 +85,12 @@ export function ClientDetailsModal({
         <div className="space-y-6 py-4">
           {/* Client Info */}
           <div className="space-y-4">
-            <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider">Informações do Cliente</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider">Informações do Cliente</h3>
+              <Button variant="ghost" size="sm" onClick={() => { onClose(); onEditClient(client); }}>
+                <Pencil className="h-4 w-4 mr-1" /> Editar
+              </Button>
+            </div>
             <div className="grid gap-3">
               {[
                 { icon: User, label: 'Nº do BI', value: client.bi },
