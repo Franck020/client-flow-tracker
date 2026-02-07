@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { getAll, put } from '@/lib/db';
-import { Manager } from '@/types/client';
+import { getAll, put, remove as dbRemove } from '@/lib/db';
+import { Manager, BOSS_PASSWORD } from '@/types/client';
 
 interface AuthContextType {
   manager: Manager | null;
@@ -9,6 +9,7 @@ interface AuthContextType {
   login: (name: string, password: string) => Promise<boolean>;
   logout: () => void;
   registerManager: (name: string, password: string) => Promise<boolean>;
+  deleteManager: (id: string, bossPassword: string) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -58,8 +59,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return true;
   };
 
+  const deleteManager = async (id: string, bossPass: string): Promise<boolean> => {
+    if (bossPass !== BOSS_PASSWORD) return false;
+    if (manager?.id === id) return false; // can't delete yourself
+    await dbRemove('managers', id);
+    setManagers(prev => prev.filter(m => m.id !== id));
+    return true;
+  };
+
   return (
-    <AuthContext.Provider value={{ manager, managers, loading, login, logout, registerManager }}>
+    <AuthContext.Provider value={{ manager, managers, loading, login, logout, registerManager, deleteManager }}>
       {children}
     </AuthContext.Provider>
   );
