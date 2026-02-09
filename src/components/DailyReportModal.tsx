@@ -43,7 +43,7 @@ export function DailyReportModal({ isOpen, onClose, report, managerName }: Daily
     if (!content) return;
     const printWindow = window.open('', '_blank');
     if (!printWindow) return;
-    printWindow.document.write(`<!DOCTYPE html><html><head><title>Relatório Diário - GestorNet</title>
+    printWindow.document.write(`<!DOCTYPE html><html><head><title>Relatório Diário - GestorTV</title>
       <style>
         body { font-family: Arial, sans-serif; padding: 20px; color: #1a1a2e; max-width: 700px; margin: 0 auto; }
         h1 { font-size: 20px; margin-bottom: 4px; text-align: center; }
@@ -61,7 +61,7 @@ export function DailyReportModal({ isOpen, onClose, report, managerName }: Daily
         .footer { margin-top: 30px; font-size: 11px; color: #999; text-align: center; border-top: 1px solid #ccc; padding-top: 8px; }
         hr { border: none; border-top: 1px solid #ddd; margin: 12px 0; }
       </style></head><body>
-      <h1>GestorNet - Relatório Diário</h1>
+      <h1>GestorTV - Relatório Diário</h1>
       <p class="meta">${format(report.date, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}</p>
       <p class="meta">Gerente: ${managerName}</p>
       <hr/>
@@ -87,7 +87,7 @@ export function DailyReportModal({ isOpen, onClose, report, managerName }: Daily
         <hr/>
         <div class="row bold" style="font-size:16px;color:${report.balance >= 0 ? '#16a34a' : '#dc2626'}"><span>Balanço</span><span>${report.balance >= 0 ? '+' : ''}${report.balance.toLocaleString('pt-AO')} Kz</span></div>
       </div>
-      <div class="footer">GestorNet • Relatório gerado em ${format(new Date(), "dd/MM/yyyy 'às' HH:mm")}</div>
+      <div class="footer">GestorTV • Relatório gerado em ${format(new Date(), "dd/MM/yyyy 'às' HH:mm")}</div>
       </body></html>`);
     printWindow.document.close();
     setTimeout(() => printWindow.print(), 300);

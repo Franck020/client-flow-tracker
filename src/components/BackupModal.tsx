@@ -27,7 +27,7 @@ export function BackupModal({ isOpen, onClose, onRestore }: BackupModalProps) {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `gestornet-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      a.download = `gestortv-backup-${new Date().toISOString().slice(0, 10)}.json`;
       a.click();
       URL.revokeObjectURL(url);
       toast.success('Backup exportado com sucesso');

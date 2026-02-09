@@ -47,7 +47,7 @@ export default function Login() {
             <Wifi className="h-8 w-8 text-primary-foreground" />
           </div>
           <div>
-            <CardTitle className="text-2xl">GestorNet</CardTitle>
+            <CardTitle className="text-2xl">GestorTV</CardTitle>
             <CardDescription>Sistema de Gestão da Empresa</CardDescription>
           </div>
         </CardHeader>
