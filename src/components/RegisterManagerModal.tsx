@@ -5,7 +5,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { UserPlus, Shield } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { BOSS_PASSWORD } from '@/types/client';
 import { toast } from 'sonner';
 
 interface RegisterManagerModalProps {
@@ -17,11 +16,11 @@ export function RegisterManagerModal({ isOpen, onClose }: RegisterManagerModalPr
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [bossPassword, setBossPassword] = useState('');
-  const { registerManager } = useAuth();
+  const { registerManager, bossConfig } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (bossPassword !== BOSS_PASSWORD) {
+    if (!bossConfig || bossPassword !== bossConfig.password) {
       toast.error('Senha do chefe incorrecta');
       return;
     }
