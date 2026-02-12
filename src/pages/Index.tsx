@@ -33,7 +33,7 @@ const Index = () => {
     addClient, updateClient, removeClient, toggleSignal, makePayment, loaded: clientsLoaded
   } = useClients();
   const {
-    addTransaction, getTodayTransactions, getTodayReport, loaded: txLoaded
+    addTransaction, getTodayTransactions, getTodayReport, getReportByDate, loaded: txLoaded
   } = useTransactions();
 
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
@@ -313,7 +313,7 @@ const Index = () => {
       />
       <AddClientModal isOpen={isAddClientOpen} onClose={() => setIsAddClientOpen(false)} onAddClient={handleAddClient} />
       <AddTransactionModal isOpen={isAddTransactionOpen} onClose={() => setIsAddTransactionOpen(false)} onAddTransaction={handleAddTransaction} />
-      <DailyReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} report={todayReport} managerName={manager?.name || ''} />
+      <DailyReportModal isOpen={isReportOpen} onClose={() => setIsReportOpen(false)} report={todayReport} managerName={manager?.name || ''} getReportByDate={getReportByDate} />
       <RegisterManagerModal isOpen={isRegisterOpen} onClose={() => setIsRegisterOpen(false)} />
       <ManageManagersModal isOpen={isManagersOpen} onClose={() => setIsManagersOpen(false)} />
       <BackupModal isOpen={isBackupOpen} onClose={() => setIsBackupOpen(false)} onRestore={() => {}} />

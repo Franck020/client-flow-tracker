@@ -1,10 +1,10 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { DailyReport } from '@/types/client';
-import { Printer, FileText } from 'lucide-react';
-import { format } from 'date-fns';
+import { Printer, FileText, ChevronLeft, ChevronRight } from 'lucide-react';
+import { format, subDays, addDays, isToday, startOfDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 interface DailyReportModalProps {
@@ -12,6 +12,7 @@ interface DailyReportModalProps {
   onClose: () => void;
   report: DailyReport;
   managerName: string;
+  getReportByDate: (date: Date) => DailyReport;
 }
 
 const categoryLabels: Record<string, string> = {
@@ -22,8 +23,17 @@ const categoryLabels: Record<string, string> = {
   outro: 'Outro',
 };
 
-export function DailyReportModal({ isOpen, onClose, report, managerName }: DailyReportModalProps) {
+export function DailyReportModal({ isOpen, onClose, report: initialReport, managerName, getReportByDate }: DailyReportModalProps) {
   const reportRef = useRef<HTMLDivElement>(null);
+  const [selectedDate, setSelectedDate] = useState<Date>(startOfDay(new Date()));
+
+  const report = isToday(selectedDate) ? initialReport : getReportByDate(selectedDate);
+
+  const goToPreviousDay = () => setSelectedDate(prev => subDays(prev, 1));
+  const goToNextDay = () => {
+    if (!isToday(selectedDate)) setSelectedDate(prev => addDays(prev, 1));
+  };
+  const goToToday = () => setSelectedDate(startOfDay(new Date()));
 
   const entradas = report.transactions.filter(t => t.type === 'entrada');
   const saidas = report.transactions.filter(t => t.type === 'saida');
@@ -111,10 +121,28 @@ export function DailyReportModal({ isOpen, onClose, report, managerName }: Daily
         </DialogHeader>
 
         <div ref={reportRef} className="space-y-4 py-2">
+          {/* Date Navigation */}
+          <div className="flex items-center justify-center gap-2">
+            <Button variant="outline" size="icon" onClick={goToPreviousDay}>
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <div className="text-center min-w-[200px]">
+              <p className="font-semibold">
+                {isToday(selectedDate) ? 'Hoje' : format(selectedDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {format(selectedDate, 'EEEE', { locale: ptBR })}
+              </p>
+            </div>
+            <Button variant="outline" size="icon" onClick={goToNextDay} disabled={isToday(selectedDate)}>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+            {!isToday(selectedDate) && (
+              <Button variant="ghost" size="sm" onClick={goToToday}>Hoje</Button>
+            )}
+          </div>
+
           <div className="text-center">
-            <p className="text-sm text-muted-foreground">
-              {format(report.date, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
-            </p>
             <p className="text-sm text-muted-foreground">Gerente: {managerName}</p>
           </div>
 
