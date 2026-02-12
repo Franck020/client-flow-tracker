@@ -4,6 +4,14 @@ export interface Manager {
   password: string;
 }
 
+export interface BossConfig {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  createdAt: string;
+}
+
 export interface Client {
   id: string;
   code: string;
@@ -59,7 +67,7 @@ export const PAYMENT_CONFIG = {
   INACTIVE_MONTHS_THRESHOLD: 3,
 } as const;
 
-export const BOSS_PASSWORD = '123454321';
+// BOSS_PASSWORD is now stored dynamically in IndexedDB (bossConfig store)
 
 export function calculatePaymentAmount(
   contractDate: Date,

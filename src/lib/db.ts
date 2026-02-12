@@ -1,5 +1,5 @@
 const DB_NAME = 'gestornet';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 let dbInstance: IDBDatabase | null = null;
 
@@ -22,6 +22,9 @@ function openDB(): Promise<IDBDatabase> {
       }
       if (!db.objectStoreNames.contains('transactions')) {
         db.createObjectStore('transactions', { keyPath: 'id' });
+      }
+      if (!db.objectStoreNames.contains('bossConfig')) {
+        db.createObjectStore('bossConfig', { keyPath: 'id' });
       }
     };
   });
