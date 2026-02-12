@@ -13,6 +13,8 @@ interface AuthContextType {
   registerManager: (name: string, password: string) => Promise<boolean>;
   deleteManager: (id: string, bossPassword: string) => Promise<boolean>;
   setupBoss: (name: string, email: string, password: string) => Promise<void>;
+  changeBossPassword: (currentPass: string, newPass: string) => Promise<boolean>;
+  changeManagerPassword: (currentPass: string, newPass: string) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -89,10 +91,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setBossConfig(config);
   };
 
+  const changeBossPassword = async (currentPass: string, newPass: string): Promise<boolean> => {
+    if (!bossConfig || currentPass !== bossConfig.password) return false;
+    const updated = { ...bossConfig, password: newPass };
+    await put('bossConfig', updated);
+    setBossConfig(updated);
+    return true;
+  };
+
+  const changeManagerPassword = async (currentPass: string, newPass: string): Promise<boolean> => {
+    if (!manager || currentPass !== manager.password) return false;
+    const updated = { ...manager, password: newPass };
+    await put('managers', updated);
+    setManagers(prev => prev.map(m => m.id === updated.id ? updated : m));
+    setManager(updated);
+    sessionStorage.setItem('gestornet_session', JSON.stringify(updated));
+    return true;
+  };
+
   const isSetupComplete = bossConfig !== null;
 
   return (
-    <AuthContext.Provider value={{ manager, managers, bossConfig, loading, isSetupComplete, login, logout, registerManager, deleteManager, setupBoss }}>
+    <AuthContext.Provider value={{ manager, managers, bossConfig, loading, isSetupComplete, login, logout, registerManager, deleteManager, setupBoss, changeBossPassword, changeManagerPassword }}>
       {children}
     </AuthContext.Provider>
   );
